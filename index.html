@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Function Chart</title>
+</head>
+<body>
+    <canvas id="speedChart" width="600" height="400"></canvas>
+    <script>
+    document.body.insertAdjacentHTML('afterbegin', `<div style="font-size:10px;  margin-top: 10px;">
+JavaScript Game Difficulty Progression Algorithm with Logarithmic Fit
+<br>
+<br>
+Use this algorithm to smoothly adjust game difficulty and enhance player experience with a dynamically scaling challenge
+</div>`);
+function fit(x, start, asymptote, x2, y2) {
+    return asymptote-(asymptote-start)*Math.pow(((asymptote-y2)/(asymptote-start)),x/x2);
+}
+        // Get the canvas context
+        const canvas = document.getElementById('speedChart');
+        const ctx = canvas.getContext('2d');
+
+        // Variables for the chart
+        const startspeed = 0.5;
+        const asymptote = 1.5;
+        const atthislevel = 30;
+        const bethisspeed = 1;
+        const levels = 200; // Number of levels to plot
+        const padding = 50;
+        const tickLength = 5; // Length of tick marks
+
+        // Canvas dimensions
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+        // Draw axes
+        ctx.beginPath();
+        ctx.moveTo(padding, padding);
+        ctx.lineTo(padding, canvasHeight - padding);
+        ctx.lineTo(canvasWidth - padding, canvasHeight - padding);
+        ctx.stroke();
+
+        // Draw x-axis tick marks
+        const xTickInterval = 10; // Adjust the interval as needed
+        for (let level = 0; level <= levels; level += xTickInterval) {
+            let x = padding + (level / levels) * (canvasWidth - 2 * padding);
+            ctx.beginPath();
+            ctx.moveTo(x, canvasHeight - padding);
+            ctx.lineTo(x, canvasHeight - padding + tickLength);
+            ctx.stroke();
+            ctx.fillText(level, x, canvasHeight - padding + 15);
+        }
+
+        // Draw y-axis tick marks
+        const yTicks = 5; // Number of ticks on the y-axis
+        for (let i = 0; i <= yTicks; i++) {
+            let speedValue = startspeed + i * (asymptote - startspeed) / yTicks;
+            let y = canvasHeight - padding - i * (canvasHeight - 2 * padding) / yTicks;
+            ctx.beginPath();
+            ctx.moveTo(padding - tickLength, y);
+            ctx.lineTo(padding, y);
+            ctx.stroke();
+            ctx.fillText(speedValue.toFixed(2), padding - 30, y + 3);
+        }
+
+        // Calculate and plot speed values
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        for (let level = 0; level <= levels; level++) {
+            let speedValue = fit(level, startspeed, asymptote, atthislevel, bethisspeed);
+            let x = padding + (level / levels) * (canvasWidth - 2 * padding);
+            let y = canvasHeight - padding - (speedValue - startspeed) / (asymptote - startspeed) * (canvasHeight - 2 * padding);
+            
+            if (level === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        ctx.stroke();
+
+        // Add labels
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("Level", canvasWidth / 2, canvasHeight - 10);
+        ctx.save();
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = "center";
+        ctx.fillText("Speed", -canvasHeight / 2, 10);
+        ctx.restore();
+
+
+
+
+
+
+const descriptionHTML = `
+    <div id="description" style="font-size:8px;  margin-top: 10px;">
+<pre>${fit}</pre>
+        In our fit-to-curve logarithmic algorithm, the specific variables are <code>start</code>, <code>asymptote</code>, <code>x2</code>, and <code>y2</code>. Here’s how they work:
+        <ul>
+            <li><code>start</code> is the initial value from which the function begins, representing the starting point of the curve.</li>
+            <li><code>asymptote</code> is the maximum value the function approaches but never quite reaches, setting the upper limit of the curve.</li>
+            <li><code>x2</code> is the x-value at which the function's curve should transition from steep to shallow.</li>
+            <li><code>y2</code> is the corresponding y-value at <code>x2</code>, helping to define the shape of the curve.</li>
+        </ul>
+        In a game, these variables could be used to adjust how rapidly the difficulty increases. For instance, <code>start</code> might represent the base speed of an enemy, <code>asymptote</code> could set the maximum speed the enemy can reach, <code>x2</code> might be a level where the enemy starts speeding up significantly, and <code>y2</code> would be the speed at that level. Adjusting these variables allows for fine-tuning the game's difficulty progression to ensure a balanced and engaging experience. To adjust the game's difficulty as levels increase, simply update the X value passed into the FIT function, leaving the other parameters constant.
+    </div>
+`;
+
+// Add the description HTML to the body of the document
+document.body.insertAdjacentHTML('beforeend', descriptionHTML);
+
+
+    </script>
+</body>
+</html>
+
+
