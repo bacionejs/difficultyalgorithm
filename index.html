@@ -96,16 +96,19 @@ function fit(x, start, asymptote, x2, y2) {
 
 
 const descriptionHTML = `
-    <div id="description" style="font-size:10px;  margin-top: 10px;">
-<pre>${fit}</pre>
-        In our fit-to-curve logarithmic algorithm, the specific variables are <code>start</code>, <code>asymptote</code>, <code>x2</code>, and <code>y2</code>. Here’s how they work:
-        <ul>
-            <li><code>start</code> is the initial value from which the function begins, representing the starting point of the curve.</li>
-            <li><code>asymptote</code> is the maximum value the function approaches but never quite reaches, setting the upper limit of the curve.</li>
-            <li><code>x2</code> is the x-value at which the function's curve should transition from steep to shallow.</li>
-            <li><code>y2</code> is the corresponding y-value at <code>x2</code>, helping to define the shape of the curve.</li>
-        </ul>
-        In a game, these variables could be used to adjust how rapidly the difficulty increases. For instance, <code>start</code> might represent the base speed of an enemy, <code>asymptote</code> could set the maximum speed the enemy can reach, <code>x2</code> might be a level where the enemy starts speeding up significantly, and <code>y2</code> would be the speed at that level. Adjusting these variables allows for fine-tuning the game's difficulty progression to ensure a balanced and engaging experience. <b>To adjust the game's difficulty as levels increase, simply update the X value passed into the FIT function, leaving the other parameters constant<b>.
+    <div id="description" style="font-size:10px; margin-top: 10px;">
+    <div style="background-color:#f5f5f5; padding:5px; border-radius:3px; border:1px solid #ddd; font-size:8px;">
+            <div style="display:block; white-space:pre-wrap; color:#333;">${fit}</div>
+        </div>
+        <div>
+            <p><b>Before</b> using the FIT algorithm, follow this process to determine the values for <b>start</b>, <b>asymptote</b>, <b>x2</b>, and <b>y2</b>:</p>
+            <ol>
+                <li>Begin with a <b>constant speed</b> value and play your game. If the speed is too slow, gradually increase it until you find an appropriate <b>minimum speed</b> (<b>start</b>).</li>
+                <li>Continue increasing the constant speed until the game becomes nearly impossible to play, identifying your <b>maximum speed</b> (<b>asymptote</b>).</li>
+                <li>As you proceed through step two, identify the point where the game shifts from easy to challenging. Use that speed as your <b>Y2</b> and set your <b>X2</b> to the level where you want to reach that speed.</li>
+            </ol>
+            <p>Now that you’ve determined these four key values, you can set your parameters for the FIT algorithm. <b>Simply update the X value (level) passed into the FIT function as your game progresses, leaving the other parameters constant.</b></p>
+        </div>
     </div>
 `;
 
